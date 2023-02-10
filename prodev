@@ -1,0 +1,89 @@
+import com.sap.gateway.ip.core.customdev.util.Message;
+import java.util.*;
+import java.lang.*;
+import groovy.json.*;
+
+def Message processData(Message message){
+
+    def body = message.getBody(String)
+
+    def NUM0  = body[0].toInteger()
+    def NUM1  = body[1].toInteger()
+    def NUM2  = body[2].toInteger()
+    def NUM3  = body[3].toInteger()
+    def NUM4  = body[4].toInteger()
+    def NUM5  = body[5].toInteger()
+    def NUM6  = body[6].toInteger()
+    def NUM7  = body[7].toInteger()
+    def NUM8  = body[8].toInteger()
+    def NUM9  = body[9].toInteger()
+    def NUM10 = body[10].toInteger()
+
+    //*Verificador do Primeiro Digito                                                                                                                           
+    def VER0U  = NUM0 * 10                                                                                                                                
+    def VER1U  = NUM1 * 9                                                                                                                                
+    def VER2U  = NUM2 * 8                                                                                                                                
+    def VER3U  = NUM3 * 7                                                                                                                                
+    def VER4U  = NUM4 * 6                                                                                                                                 
+    def VER5U  = NUM5 * 5                                                                                                                                
+    def VER6U  = NUM6 * 4                                                                                                                                
+    def VER7U  = NUM7 * 3                                                                                                                                
+    def VER8U  = NUM8 * 2      
+    
+    //*Verificador do Segundo Digito    
+    VER0D  = NUM0 * 11 
+    VER1D  = NUM1 * 10
+    VER2D  = NUM2 * 9
+    VER3D  = NUM3 * 8 
+    VER4D  = NUM4 * 7  
+    VER5D  = NUM5 * 6
+    VER6D  = NUM6 * 5
+    VER7D  = NUM7 * 4 
+    VER8D  = NUM8 * 3
+    VER9D  = NUM9 * 2                                                                                                                            
+
+    //Contador do Primeiro Digito                                                                    
+     def resto1 = (VER0U + VER1U + VER2U + VER3U + VER4U + VER5U + VER6U + VER7U + VER8U) % 11        
+     def soma = (VER0U + VER1U + VER2U + VER3U + VER4U + VER5U + VER6U + VER7U + VER8U) 
+    // println soma      
+     def conta1 =   11 - resto1 
+                                                                             
+
+    if(conta1 > 9){                                                                                  
+        conta1 = 0                                                                                   
+    }
+
+    //Contador do Segundo Digito
+    def resto2 = (VER0D + VER1D + VER2D + VER3D + VER4D + VER5D + VER6D + VER7D + VER8D + VER9D) % 11
+     soma = VER0D + VER1D + VER2D + VER3D + VER4D + VER5D + VER6D + VER7D + VER8D + VER9D 
+    // println soma
+    def conta2 =  11 - resto2
+
+    def validacao = ""
+    
+
+    if(conta2 > 9){
+        conta2 = 0
+       
+    }
+    if(conta1 == NUM9 && conta2 == NUM10){
+       validacao = "CPF válido"
+    }else{
+        validacao = "CPF inválido" 
+    }
+
+    //Variaveis e Valores
+    String primeiroDigValido = (body.substring(0,3))
+    String segundoDigValido = (body.substring(3,6))
+    String terceiroDigValido = (body.substring(6,9))
+    String ultimoDigValido = (body.substring(9,11))
+
+    //Concatenação 
+    String CPF = primeiroDigValido +"."+ segundoDigValido +"."+ terceiroDigValido +"-"+ ultimoDigValido
+    
+    //Output
+    message.setBody(CPF + " " + validacao)
+    println(CPF + " " + validacao)
+
+    return message
+}    
